@@ -1,0 +1,80 @@
+name: Network CI/CD Pipeline
+
+# --- This section defines WHEN the pipeline runs ---
+on:
+  # 1. Run on every push to the 'main' branch
+  push:
+    branches:
+      - main
+
+  # 2. Allows you to run the "deploy" job manually from the GitHub UI
+  workflow_dispatch:
+
+  # 3. Runs the "drift-detect" job on a schedule (e.g., every 6 hours)
+  schedule:
+    - cron: '0 */6 * * *' # This is a CRON expression
+
+# --- This section defines the JOBS that run ---
+jobs:
+  validate:
+    name: Validate Configuration Change
+    # Run this job only if the trigger was a 'push'
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Python dependencies
+        run: pip install pyyaml jinja2
+
+      - name: Run Validation Script
+        run: python scripts/validate_config.py
+
+  deploy:
+    name: Deploy to Device
+    # This job needs the 'validate' job to succeed first
+    needs: validate
+    # Run this job only if the trigger was a manual 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      
+      # In a real scenario, you'd add steps to install ncclient,
+      # load secrets (like passwords), and run your deployment script.
+      - name: Run Manual Deployment
+        run: |
+          echo "Simulating deployment to device..."
+          echo "This is where you would run your ncclient deployment script."
+          # python scripts/deploy_config.py
+
+  drift-detect:
+    name: Detect Configuration Drift
+    # Run this job only if the trigger was a 'schedule'
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Python dependencies
+        run: pip install ncclient
+
+      - name: Run Drift Detection Script
+        run: |
+          echo "Checking for configuration drift..."
+          # This is where you would run the ncclient script that pulls
+          # a config and compares it to the files in Git.
+          # python scripts/check_drift.py
