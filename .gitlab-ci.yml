@@ -1,1 +1,32 @@
+stages:
+  - validate
+  - deploy
+  - drift-detect
 
+# This job runs when a change is pushed to Git
+validate_change:
+  stage: validate
+  script:
+    - pip install pyyaml jinja2
+    - python scripts/validate_config.py
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != "schedule"' # Run on all commits, but not on scheduled runs
+
+# This job can be run manually after validation passes
+deploy_change:
+  stage: deploy
+  script:
+    # Here you would run your ncclient script to push the config
+    - echo "Deploying config to device..."
+    - # python scripts/deploy_config.py
+  when: manual # Only run when a user clicks "play" in GitLab
+
+# This job runs on a schedule (e.g., nightly)
+detect_drift:
+  stage: drift-detect
+  script:
+    # Here you would run the validation script from our previous conversation
+    - echo "Checking for configuration drift..."
+    - # python scripts/check_drift.py
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"' # Only run on a schedule
