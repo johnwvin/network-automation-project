@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: # Allows manual runs
+  workflow_dispatch:
   schedule:
     - cron: '0 */6 * * *'
 
@@ -25,13 +25,11 @@ jobs:
       - name: Install Python dependencies
         run: pip install pyyaml jinja2
 
-      # --- THIS IS THE CORRECTED STEP ---
       - name: Run Validation Script
-        # Tells the runner to execute this command from within your project folder
-        working-directory: ./network-automation-project 
+        # No 'working-directory' is needed here.
+        # The runner is already in the root of your project.
         run: python scripts/validate_change.py
 
-  # --- THIS JOB HAS BEEN UPDATED ---
   deploy:
     name: Deploy to Device
     needs: validate
@@ -53,7 +51,6 @@ jobs:
       - name: Deploy to Legacy CLI Device
         run: python scripts/master_deploy.py switch1-legacy
 
-  # --- THIS JOB HAS BEEN UPDATED ---
   drift-detect:
     name: Detect Configuration Drift
     if: github.event_name == 'schedule'
