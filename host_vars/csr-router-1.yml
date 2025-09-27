@@ -1,0 +1,32 @@
+# host_vars/csr-router-1.yml
+
+hostname: csr1000v-1
+connection_type: netconf
+
+interfaces:
+  - name: 1
+    description: "Link to Core Switch"
+    ip_address: "10.1.0.1"
+    netmask: "255.255.255.0"
+  - name: 2
+    description: "Link to csr1000v-2 Downstream"
+    ip_address: "10.2.0.1"
+    netmask: "255.255.255.0"
+  - name: 3
+    description: "Link to csr1000v-3 Downstream"
+    ip_address: "10.3.0.1"
+    netmask: "255.255.255.0"
+
+ospf:
+  process_id: 1
+  router_id: 2.2.2.2
+  networks:
+    - address: "10.1.0.1"
+      wildcard: "0.0.0.0"
+      area: 0
+    - address: "10.2.0.1"
+      wildcard: "0.0.0.0"
+      area: 0
+    - address: "10.3.0.1"
+      wildcard: "0.0.0.0"
+      area: 0

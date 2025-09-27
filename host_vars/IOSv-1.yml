@@ -1,0 +1,7 @@
+hostname: IOSv-1
+connection_type: cli # <-- New key
+interfaces:
+  - name: "0/1"
+    description: "CLI Managed Interface"
+    ip_address: "10.2.2.2"
+    netmask: "255.255.255.0"

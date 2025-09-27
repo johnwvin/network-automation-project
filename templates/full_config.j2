@@ -1,0 +1,41 @@
+<config>
+  <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+    <hostname>{{ hostname }}</hostname>
+
+    {% for interface in interfaces %}
+    <interface>
+      <GigabitEthernet>
+        <name>{{ interface.name }}</name>
+        <description>{{ interface.description }}</description>
+        <ip>
+          <address>
+            <primary>
+              <address>{{ interface.ip_address }}</address>
+              <mask>{{ interface.netmask }}</mask>
+            </primary>
+          </address>
+        </ip>
+      </GigabitEthernet>
+    </interface>
+    {% endfor %}
+
+    {% if ospf %}
+    <router>
+      <ospf xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-ospf">
+        <process-id>
+          <id>{{ ospf.process_id }}</id>
+          <router-id>{{ ospf.router_id }}</router-id>
+          {% for network in ospf.networks %}
+          <network>
+            <ip>{{ network.address }}</ip>
+            <wildcard>{{ network.wildcard }}</wildcard>
+            <area>{{ network.area }}</area>
+          </network>
+          {% endfor %}
+        </process-id>
+      </ospf>
+    </router>
+    {% endif %}
+
+  </native>
+</config>
