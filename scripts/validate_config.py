@@ -7,7 +7,7 @@ PROHIBITED_WORDS = ['insecure', 'legacy', 'temp']
 print("--- Starting Validation ---")
 
 # Load variables and template
-with open('host_vars/router1.yml') as f:
+with open('host_vars/csr-router-1.yml') as f:
     variables = yaml.safe_load(f)
 
 env = Environment(loader=FileSystemLoader('templates/'))
