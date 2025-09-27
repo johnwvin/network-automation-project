@@ -28,7 +28,7 @@ jobs:
       - name: Run Validation Script
         # No 'working-directory' is needed here.
         # The runner is already in the root of your project.
-        run: python scripts/validate_change.py
+        run: python scripts/validate_config.py
 
   deploy:
     name: Deploy to Device
