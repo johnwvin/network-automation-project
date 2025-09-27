@@ -5,7 +5,7 @@ connection_type: netconf
 
 interfaces:
   - name: 1
-    description: "Link to Core Switch"
+    description: "Link to Core Switch Legacy"
     ip_address: "10.1.0.1"
     netmask: "255.255.255.0"
   - name: 2
