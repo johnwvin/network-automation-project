@@ -10,26 +10,26 @@ on:
 
 jobs:
   validate:
-  name: Validate Configuration Change
-  if: github.event_name == 'push'
-  runs-on: ubuntu-latest
-  steps:
-    - name: Check out repository code
-      uses: actions/checkout@v4
+    name: Validate Configuration Change
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-    - name: Install Python dependencies
-      run: pip install pyyaml jinja2
+      - name: Install Python dependencies
+        run: pip install pyyaml jinja2
 
-    # --- THIS IS THE CORRECTED STEP ---
-    - name: Run Validation Script
-      # Tells the runner to execute this command from within your project folder
-      working-directory: ./network-automation-project 
-      run: python scripts/validate_change.py
+      # --- THIS IS THE CORRECTED STEP ---
+      - name: Run Validation Script
+        # Tells the runner to execute this command from within your project folder
+        working-directory: ./network-automation-project 
+        run: python scripts/validate_change.py
 
   # --- THIS JOB HAS BEEN UPDATED ---
   deploy:
